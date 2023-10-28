@@ -1,15 +1,14 @@
 from operator import itemgetter
 
-from langchain.prompts import ChatPromptTemplate, PromptTemplate
+from dotenv import load_dotenv
 from langchain.chat_models import ChatOpenAI
 from langchain.embeddings import OpenAIEmbeddings
-from langchain.schema.output_parser import StrOutputParser
-from langchain.schema.runnable import RunnablePassthrough, RunnableLambda
-from langchain.vectorstores import FAISS
-from langchain.schema.runnable import RunnableMap
+from langchain.prompts import ChatPromptTemplate, PromptTemplate
 from langchain.schema import format_document
-from dotenv import load_dotenv
-
+from langchain.schema.output_parser import StrOutputParser
+from langchain.schema.runnable import RunnableMap
+from langchain.schema.runnable import RunnablePassthrough
+from langchain.vectorstores import FAISS
 
 load_dotenv()
 
@@ -27,10 +26,10 @@ def rag():
     model = ChatOpenAI()
 
     chain = (
-        {"context": retriever, "question": RunnablePassthrough()}
-        | prompt
-        | model
-        | StrOutputParser()
+            {"context": retriever, "question": RunnablePassthrough()}
+            | prompt
+            | model
+            | StrOutputParser()
     )
     result = chain.invoke("Where did harrison work?")
     print(result)
@@ -44,11 +43,11 @@ def rag():
     """
     prompt = ChatPromptTemplate.from_template(template)
     chain = {
-        "context": itemgetter("question") | retriever,
-        "question": itemgetter("question"),
-        "language": itemgetter("language"),
-    } | prompt | model | StrOutputParser()
-    
+                "context": itemgetter("question") | retriever,
+                "question": itemgetter("question"),
+                "language": itemgetter("language"),
+            } | prompt | model | StrOutputParser()
+
     result = chain.invoke({"question": "where did harrison work?", "language": "japanese"})
     print(result)
 
@@ -73,11 +72,11 @@ def conversational_retrieval_chain():
     """
     ANSWER_PROMPT = ChatPromptTemplate.from_template(template)
     DEFAULT_DOCUMENT_PROMPT = PromptTemplate.from_template(template="page_content")
-    
-    def _combine_documents(docs, document_prompt = DEFAULT_DOCUMENT_PROMPT, document_separator="\n\n"):
+
+    def _combine_documents(docs, document_prompt=DEFAULT_DOCUMENT_PROMPT, document_separator="\n\n"):
         doc_strings = [format_document(doc, document_prompt) for doc in docs]
         return document_separator.join(doc_strings)
-    
+
     def _format_chat_history(chat_history: list[tuple]) -> str:
         buffer = ""
         for dialogue_turn in chat_history:
@@ -88,7 +87,7 @@ def conversational_retrieval_chain():
 
     _inputs = RunnableMap(
         standalone_question=RunnablePassthrough.assign(
-        chain_history=lambda x: _format_chat_history(x['chat_history'])
+            chain_history=lambda x: _format_chat_history(x['chat_history'])
         ) | CONDENSE_QUESTION_PROMPT | ChatOpenAI(temperature=0) | StrOutputParser(),
     )
     _context = {
@@ -102,6 +101,6 @@ def conversational_retrieval_chain():
     })
     print(result)
 
+
 if __name__ == "__main__":
     conversational_retrieval_chain()
-
