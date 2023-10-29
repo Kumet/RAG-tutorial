@@ -3,6 +3,9 @@ from langchain.indexes import VectorstoreIndexCreator
 from langchain.chains import RetrievalQA
 from langchain.chat_models import ChatOpenAI
 from dotenv import load_dotenv
+from ragas.metrics import faithfulness, answer_relevancy, context_recall
+from ragas.langchain import RagasEvaluatorChain
+
 
 load_dotenv()
 
@@ -22,6 +25,16 @@ def evaluate_qa_chain():
     question = "How did New York City get its name?"
     result = qa_chain({"query": question})
     print(result["result"])
+
+    # make eval chains
+    eval_chains = {
+        m.name: RagasEvaluatorChain(metric=m)
+        for m in [faithfulness, answer_relevancy, context_recall]
+    }
+
+    for name, eval_chain in eval_chains.items():
+        score_name = f"{name}_score"
+        print(f"{score_name}: {eval_chain(result)[score_name]}")
 
 
 if __name__ == '__main__':
