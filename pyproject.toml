@@ -5,7 +5,7 @@ description = "Add a short description here"
 authors = [
     { name = "m.kumeta", email = "kumeta1202@gmail.com" }
 ]
-dependencies = ["fastapi~=0.104.0", "uvicorn~=0.23.2", "langchain~=0.0.27", "openai~=0.28.1", "faiss-cpu~=1.7.4", "tiktoken~=0.5.1", "python-dotenv~=1.0.0", "chromadb~=0.4.15", "pypdf~=3.16.4", "pandas~=2.0.3", "duckduckgo-search~=3.9.3", "beautifulsoup4~=4.12.2", "ragas~=0.0.18", "datasets~=2.14.6", "llama_index~=0.8.42"]
+dependencies = ["fastapi~=0.104.0", "uvicorn~=0.23.2", "langchain~=0.0.327", "openai~=0.28.1", "faiss-cpu~=1.7.4", "tiktoken~=0.5.1", "python-dotenv~=1.0.0", "chromadb~=0.4.15", "pypdf~=3.16.4", "pandas~=2.0.3", "duckduckgo-search~=3.9.3", "beautifulsoup4~=4.12.2", "ragas~=0.0.18", "datasets~=2.14.6", "llama_index~=0.8.42"]
 readme = "README.md"
 requires-python = ">= 3.8"
 

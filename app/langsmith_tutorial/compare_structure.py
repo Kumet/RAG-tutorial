@@ -38,7 +38,7 @@ def default_news_role(text: str) -> str:
         # retriever=vectorstore.as_retriever(search_kwargs={"k": 1}),
         retriever=vectorstore.as_retriever(),
         return_source_documents=True,
-        # chain_type="map_reduce",
+        chain_type="map_rerank",
         # chain_type="refine",
     )
 
@@ -168,7 +168,7 @@ def custom_chain_type_(text: str) -> str:
                 chain_type="stuff",  # or any other appropriate chain type
                 retriever=retriever,
                 return_source_documents=True,
-                chain_type_kwargs=chain_type_kwargs
+                # chain_type_kwargs=chain_type_kwargs
             )
             | RunnablePassthrough()
             | StrOutputParser()
@@ -182,4 +182,4 @@ if __name__ == '__main__':
     # print(default_news_role(question))
     # print(new_news_role(question))
     # return_source_test(question)
-    print(custom_chain_type_(question))
+    print(default_news_role(question))
